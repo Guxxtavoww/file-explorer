@@ -2,13 +2,20 @@
 
 import * as React from 'react';
 import { Circle } from 'lucide-react';
+import { useFormContext } from 'react-hook-form';
 import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
 
 import { cn } from '@/utils/cn.util';
 
+import { FormControl, FormField, FormItem, FormLabel } from './form';
+
+export type RadioGroupProps = React.ComponentPropsWithoutRef<
+  typeof RadioGroupPrimitive.Root
+>;
+
 const RadioGroup = React.forwardRef<
   React.ElementRef<typeof RadioGroupPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Root>
+  RadioGroupProps
 >(({ className, ...props }, ref) => {
   return (
     <RadioGroupPrimitive.Root
@@ -41,4 +48,61 @@ const RadioGroupItem = React.forwardRef<
 });
 RadioGroupItem.displayName = RadioGroupPrimitive.Item.displayName;
 
-export { RadioGroup, RadioGroupItem };
+// Define the props type for RadioGroupField
+export type RadioGroupFieldProps<T extends string> = Omit<
+  RadioGroupProps,
+  'name' | 'defaultChecked' | 'defaultValue'
+> & {
+  radioFields: {
+    label: string;
+    readonly value: T;
+  }[];
+  name: string;
+  defaultValue?: T;
+  radioGroupLabel: string;
+};
+
+function RadioGroupField<T extends string>({
+  name,
+  radioFields,
+  defaultValue,
+  disabled,
+  radioGroupLabel,
+  ...rest
+}: RadioGroupFieldProps<T>) {
+  const { control } = useFormContext();
+
+  return (
+    <FormField
+      control={control}
+      name={name}
+      defaultValue={defaultValue}
+      disabled={disabled}
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>{radioGroupLabel}</FormLabel>
+          <RadioGroup
+            onValueChange={field.onChange}
+            defaultValue={field.value}
+            className="flex flex-col space-y-1"
+            {...rest}
+          >
+            {radioFields.map(({ label, value }, index) => (
+              <FormItem
+                className="flex items-center space-x-3 space-y-0"
+                key={index}
+              >
+                <FormControl>
+                  <RadioGroupItem value={value} />
+                </FormControl>
+                <FormLabel className="font-normal">{label}</FormLabel>
+              </FormItem>
+            ))}
+          </RadioGroup>
+        </FormItem>
+      )}
+    />
+  );
+}
+
+export { RadioGroup, RadioGroupItem, RadioGroupField };

@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { useFormContext } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
 
 import { cn } from '@/utils/cn.util';
 
-import { FormField, FormLabel, FormMessage } from './form';
+import { FormLabel, FormMessage } from './form';
 
 export interface TextareaProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
@@ -42,7 +42,7 @@ function TextareaField({
   const { control } = useFormContext();
 
   return (
-    <FormField
+    <Controller
       name={name}
       control={control}
       defaultValue={defaultValue}
