@@ -2,6 +2,7 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 mod utils;
+mod features;
 
 use tauri::Menu;
 use utils::theme::{ change_theme, read_theme };
