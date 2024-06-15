@@ -20,10 +20,24 @@ pub fn change_theme(theme: &str) {
 
 #[tauri::command]
 pub fn read_theme() -> String {
-    let mut file = File::open(FILE_PATH).unwrap();
+    let file_result = File::open(FILE_PATH);
 
-    let mut file_content = String::new();
-    file.read_to_string(&mut file_content).expect("Error reading the file");
+    match file_result {
+        Ok(mut file) => {
+            let mut file_content = String::new();
 
-    file_content
+            file.read_to_string(&mut file_content).expect("Error reading the file");
+        
+            return file_content;
+        },
+        Err(_err) => {
+            let mut theme_file = File::create("theme.txt").unwrap();
+            let light = "light";
+
+            theme_file.write_all(light.as_bytes()).expect("Erro ao inserir conteudo no arquivo");
+
+            return light.to_string();
+        }
+    }
+
 }

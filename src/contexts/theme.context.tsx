@@ -29,7 +29,7 @@ export default function ThemeProvider({ children }: WithChildren) {
   });
 
   useEffect(() => {
-    const body = document.querySelector('.body');
+    const body = document.querySelector('body');
 
     body?.classList.add(theme);
 
@@ -49,7 +49,7 @@ export default function ThemeProvider({ children }: WithChildren) {
   );
 }
 
-export function useTheme() {
+export function useTheme(): ThemeContextType {
   const context = useContext(ThemeContext);
 
   if (!context) {

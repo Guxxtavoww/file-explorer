@@ -58,7 +58,6 @@
     },
     "windows": [
       {
-        "fullscreen": false,
         "height": 600,
         "resizable": true,
         "title": "File Explorer",

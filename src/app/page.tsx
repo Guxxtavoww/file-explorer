@@ -2,7 +2,7 @@
 
 export default function Home() {
   return (
-    <main>
+    <main className="space-y-2">
       <h2>Olá mundo!</h2>
     </main>
   );

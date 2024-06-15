@@ -17,23 +17,15 @@ export function WindowControls() {
       className="w-full py-2 px-2 flex items-center justify-between mb-3  border-b"
       data-tauri-drag-region
     >
-      <div>
-        <Button
-          variant="outline"
-          onClick={toggleTheme}
-          className="inline-flex gap-2 items-center"
-          disabled={isPending}
-        >
-          {isPending ? (
-            <Loader />
-          ) : theme === 'light' ? (
-            <SunMedium />
-          ) : (
-            <Moon />
-          )}{' '}
-          {captalize(theme)}
-        </Button>
-      </div>
+      <Button
+        variant="outline"
+        onClick={toggleTheme}
+        className="inline-flex gap-2 items-center"
+        disabled={isPending}
+      >
+        {isPending ? <Loader /> : theme === 'light' ? <SunMedium /> : <Moon />}{' '}
+        {captalize(theme)}
+      </Button>
       <div className="flex gap-2">
         <Button variant="ghost" onClick={() => appWindow.minimize()}>
           <Minimize2 />

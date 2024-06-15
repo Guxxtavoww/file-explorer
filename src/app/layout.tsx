@@ -4,7 +4,9 @@ import { HydrationOverlay } from '@builder.io/react-hydration-overlay';
 
 import { cn } from '@/utils/cn.util';
 import { Contexts } from '@/contexts/contexts';
+import { Search } from '@/components/layout/search';
 import { WindowControls } from '@/components/layout/window-controls';
+import { FilesBreadcumb } from '@/components/layout/files-breadcumb';
 
 import './globals.css';
 
@@ -20,9 +22,15 @@ export default function RootLayout({ children }: WithChildren) {
     <HydrationOverlay>
       <Contexts>
         <html lang="en" suppressHydrationWarning>
-          <body className={cn(inter.className, 'body w-full min-h-svh')}>
+          <body className={cn(inter.className, 'w-full min-h-svh')}>
             <WindowControls />
-            {children}
+            <div className="px-3.5 space-y-2.5">
+              <div className="flex justify-between items-center">
+                <FilesBreadcumb />
+                <Search />
+              </div>
+              {children}
+            </div>
           </body>
         </html>
       </Contexts>
