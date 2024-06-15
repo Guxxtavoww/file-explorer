@@ -4,6 +4,7 @@ import { HydrationOverlay } from '@builder.io/react-hydration-overlay';
 
 import { cn } from '@/utils/cn.util';
 import { TanstackProvider } from '@/providers/tanstack-provider';
+import { WindowControls } from '@/components/layout/window-controls';
 
 import './globals.css';
 
@@ -20,6 +21,7 @@ export default function RootLayout({ children }: WithChildren) {
       <TanstackProvider>
         <html lang="en" suppressHydrationWarning>
           <body className={cn(inter.className, 'w-full min-h-svh bg-white')}>
+            <WindowControls />
             {children}
           </body>
         </html>

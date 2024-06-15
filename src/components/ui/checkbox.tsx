@@ -7,7 +7,6 @@ import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
 
 import { cn } from '@/utils/cn.util';
 
-import { Label } from './label';
 import { FormField, FormLabel, FormMessage } from './form';
 
 export type CheckboxProps = Omit<

@@ -85,6 +85,8 @@ function RadioGroupField<T extends string>({
             onValueChange={field.onChange}
             defaultValue={field.value}
             className="flex flex-col space-y-1"
+            disabled={field.disabled}
+            onBlur={field.onBlur}
             {...rest}
           >
             {radioFields.map(({ label, value }, index) => (
