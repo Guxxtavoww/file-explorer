@@ -42,3 +42,4 @@ next-env.d.ts
 
 **/*.exe
 **/*.pdb
+**/theme.txt

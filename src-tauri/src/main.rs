@@ -4,13 +4,14 @@
 mod utils;
 
 use tauri::Menu;
+use utils::theme::{ change_theme, read_theme };
 use utils::splashscreen::close_splashscreen;
 
 fn main() {
   let menu = Menu::new();
 
   tauri::Builder::default()
-    .invoke_handler(tauri::generate_handler![close_splashscreen])
+    .invoke_handler(tauri::generate_handler![close_splashscreen, change_theme, read_theme])
     .menu(menu)
     .on_menu_event(|event| {
       match event.menu_item_id() {
