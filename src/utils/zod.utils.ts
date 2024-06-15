@@ -3,7 +3,7 @@ import { type ZodSchema, type ZodTypeDef, z } from 'zod';
 import { isNullableValue } from './is-nullable-value.util';
 
 export function createNullableTransform<
-  TOutput = any,
+  TOutput = unknown,
   TDef extends ZodTypeDef = ZodTypeDef,
   TInput = TOutput
 >(schema: ZodSchema<TOutput, TDef, TInput>) {
