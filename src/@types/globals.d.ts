@@ -5,4 +5,8 @@ declare global {
     Readonly<{ children: ReactNode }>;
 
   export type Maybe<T> = T | undefined | null;
+
+  export interface DirectoryContent {
+    [key: string]: [string, string]; // Key will be either "Directory" or "File"
+  }
 }

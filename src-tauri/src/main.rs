@@ -47,7 +47,8 @@ async fn main() {
         open_directory, 
         create_file, 
         create_directory, 
-        rename_file, delete_file, 
+        rename_file, 
+        delete_file, 
         search_directory, 
         get_volumes
       ])
