@@ -59,6 +59,7 @@ function CheckboxField({
               onCheckedChange={field.onChange}
               className={className}
               disabled={disabled}
+              checked={field.value}
               id={name}
               {...rest}
             />

@@ -64,6 +64,7 @@ async fn main() {
         _ => {}
       }
     })
+    .manage(Arc::new(Mutex::new(AppState::default())))
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
 }

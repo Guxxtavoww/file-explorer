@@ -6,7 +6,14 @@ declare global {
 
   export type Maybe<T> = T | undefined | null;
 
-  export interface DirectoryContent {
-    [key: string]: [string, string]; // Key will be either "Directory" or "File"
+  export interface iDirectoryContent
+    extends Record<'Directory' | 'File', readonly [string, string]> {}
+
+  export interface iVolume {
+    name: string;
+    mountpoint: string;
+    available_gb: number;
+    used_gb: number;
+    total_gb: number;
   }
 }

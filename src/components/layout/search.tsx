@@ -12,12 +12,15 @@ import { fileExtentionsOptions } from '@/data/file-extentions-options.data';
 import { Form } from '../ui/form';
 import { Button } from '../ui/button';
 import { InputField } from '../ui/input';
+import { CheckboxField } from '../ui/checkbox';
 import { SelectField } from '../ui/select-field';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 
 const formSchema = z.object({
-  query: optionalStringSchema,
-  fileExtention: optionalStringSchema,
+  query: optionalStringSchema.default(''),
+  extension: optionalStringSchema,
+  acceptFiles: z.boolean().default(true),
+  acceptDirectories: z.boolean().default(true),
 });
 
 type FormType = z.infer<typeof formSchema>;
@@ -27,8 +30,14 @@ export function Search() {
     resolver: zodResolver(formSchema),
   });
 
-  async function handleSubmit({ query, fileExtention }: FormType) {
-    console.log(query, fileExtention);
+  async function handleSubmit(filters: FormType) {
+    const results = await invoke<iDirectoryContent[]>('search_directory', {
+      ...filters,
+      searchDirectory: '',
+      mountPnt: '',
+    });
+
+    console.log(results);
   }
 
   return (
@@ -44,14 +53,30 @@ export function Search() {
               <Filter />
             </Button>
           </PopoverTrigger>
-          <PopoverContent>
+          <PopoverContent
+            className="min-w-[500px] flex flex-col items-start gap-5"
+            align="end"
+          >
+            <h3 className="text-2xl">Filtros</h3>
+
             <SelectField
               options={fileExtentionsOptions}
               labelAccessor="label"
               valueAccessor="value"
-              name="fileExtention"
+              name="extension"
               placeholder="Selecione uma extensão de arquivo"
               selectLabel="Extensões de arquivo"
+            />
+
+            <CheckboxField
+              name="acceptDirectories"
+              label="Buscar por pastas"
+              defaultChecked={true}
+            />
+            <CheckboxField
+              name="acceptFiles"
+              label="Buscar por arquivos"
+              defaultChecked={true}
             />
           </PopoverContent>
         </Popover>
