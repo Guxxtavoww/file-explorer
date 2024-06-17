@@ -20,25 +20,13 @@ export function useChooseVolumes() {
 
   const volumesLengthRef = useRef<number>(0);
 
-  const {
-    setCurrentVolumeMountPoint,
-    pathHistory,
-    setPathHistory,
-    setCurrentHistoryPlace,
-  } = useAppState();
+  const { setCurrentVolumeMountPoint } = useAppState();
 
   const handleVolumeClick = useCallback(
     async (mount_point: string) => {
-      const pathHistoryIndex = pathHistory.length - 1;
-
-      if (pathHistory[pathHistoryIndex] != mount_point) {
-        setPathHistory(mount_point);
-      }
-
       setCurrentVolumeMountPoint(mount_point);
-      setCurrentHistoryPlace(pathHistoryIndex);
     },
-    [pathHistory]
+    [setCurrentVolumeMountPoint]
   );
 
   return {

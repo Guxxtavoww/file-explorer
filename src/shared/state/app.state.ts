@@ -3,19 +3,25 @@ import { create } from 'zustand';
 export type AppState = {
   currentVolumeMountPoint: string | undefined;
   setCurrentVolumeMountPoint: (mountPoint?: string) => void;
-  pathHistory: string[];
-  setPathHistory: (newPath: string) => void;
-  currentHistoryPlace: number;
-  setCurrentHistoryPlace: (newPlace: number) => void;
+  childPath: string[];
+  setChildPath: (path: string) => void;
+  removeChildPath: (path: string) => void;
 };
 
 export const useAppState = create<AppState>((set) => ({
-  currentVolumeMountPoint: undefined,
-  pathHistory: [],
-  currentHistoryPlace: 0,
   setCurrentVolumeMountPoint: (mountPoint) =>
     set({ currentVolumeMountPoint: mountPoint }),
-  setPathHistory: (newPath) =>
-    set((state) => ({ pathHistory: [...state.pathHistory, newPath] })),
-  setCurrentHistoryPlace: (newPlace) => set({ currentHistoryPlace: newPlace }),
+  currentVolumeMountPoint: undefined,
+  childPath: [],
+  setChildPath: (path) =>
+    set((state) => ({
+      childPath: [
+        ...state.childPath,
+        path.replace(state.currentVolumeMountPoint as string, ''),
+      ],
+    })),
+  removeChildPath: (path) =>
+    set((state) => ({
+      childPath: state.childPath.filter((item) => item !== path),
+    })),
 }));

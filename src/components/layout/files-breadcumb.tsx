@@ -11,7 +11,12 @@ import {
 import { useAppState } from '@/shared/state/app.state';
 
 export function FilesBreadcumb() {
-  const { currentVolumeMountPoint, setCurrentVolumeMountPoint } = useAppState();
+  const {
+    currentVolumeMountPoint,
+    setCurrentVolumeMountPoint,
+    childPath,
+    removeChildPath,
+  } = useAppState();
 
   return (
     <Breadcrumb>
@@ -23,10 +28,23 @@ export function FilesBreadcumb() {
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         {currentVolumeMountPoint ? (
-          <BreadcrumbItem>
+          <BreadcrumbLink>
             <BreadcrumbLink>{currentVolumeMountPoint}</BreadcrumbLink>
-          </BreadcrumbItem>
+          </BreadcrumbLink>
         ) : null}
+        {childPath.length
+          ? childPath.map((path, index) => (
+              <>
+                <BreadcrumbSeparator />
+                <BreadcrumbLink
+                  key={index}
+                  onClick={() => removeChildPath(path)}
+                >
+                  <BreadcrumbLink>{path}</BreadcrumbLink>
+                </BreadcrumbLink>
+              </>
+            ))
+          : null}
         {/*
         <BreadcrumbSeparator />
         <BreadcrumbItem>

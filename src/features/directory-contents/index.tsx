@@ -5,8 +5,12 @@ import { Loader } from '@/components/layout/loader';
 import { useDirectoryContent } from './directory-contents.hook';
 
 export function DirectoryContents() {
-  const { directoryContents, isLoading, onDirectoryDoubleClick } =
-    useDirectoryContent();
+  const {
+    directoryContents,
+    isLoading,
+    onDirectoryDoubleClick,
+    onFileDoubleClick,
+  } = useDirectoryContent();
 
   if (isLoading) {
     return <Loader label="Carregando dados..." />;
@@ -22,15 +26,21 @@ export function DirectoryContents() {
           [string, string]
         ];
 
+        const isDirectory = type === 'Directory';
+
         return (
           <Button
             variant="ghost"
             key={index}
             className="flex justify-between w-full !py-8"
-            onDoubleClick={() => onDirectoryDoubleClick(path)}
+            onDoubleClick={() =>
+              isDirectory
+                ? onDirectoryDoubleClick(path)
+                : onFileDoubleClick(path)
+            }
           >
             <strong className="inline-flex items-center gap-3">
-              {type === 'Directory' ? <Folder /> : <File />} {name}
+              {isDirectory ? <Folder /> : <File />} {name}
             </strong>
             <div className="flex items-center gap-3">
               <Button variant="destructive">
