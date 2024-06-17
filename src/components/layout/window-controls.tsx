@@ -1,5 +1,3 @@
-'use client';
-
 import { appWindow } from '@tauri-apps/api/window';
 import { X, Minimize2, Maximize, SunMedium, Moon } from 'lucide-react';
 
@@ -14,7 +12,7 @@ export function WindowControls() {
 
   return (
     <nav
-      className="w-full py-2 px-2 flex items-center justify-between mb-3  border-b"
+      className="fixed top-0 left-0 w-full py-2 px-2 flex items-center justify-between mb-3 border-b bg-background"
       data-tauri-drag-region
     >
       <Button

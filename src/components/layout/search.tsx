@@ -1,5 +1,3 @@
-'use client';
-
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { invoke } from '@tauri-apps/api/tauri';
@@ -54,30 +52,29 @@ export function Search() {
             </Button>
           </PopoverTrigger>
           <PopoverContent
-            className="min-w-[500px] flex flex-col items-start gap-5"
+            className="min-w-[600px] flex flex-col items-start gap-5"
             align="end"
           >
             <h3 className="text-2xl">Filtros</h3>
-
-            <SelectField
-              options={fileExtentionsOptions}
-              labelAccessor="label"
-              valueAccessor="value"
-              name="extension"
-              placeholder="Selecione uma extensão de arquivo"
-              selectLabel="Extensões de arquivo"
-            />
-
-            <CheckboxField
-              name="acceptDirectories"
-              label="Buscar por pastas"
-              defaultChecked={true}
-            />
-            <CheckboxField
-              name="acceptFiles"
-              label="Buscar por arquivos"
-              defaultChecked={true}
-            />
+            <div className="flex items-center gap-4">
+              <SelectField
+                options={fileExtentionsOptions}
+                labelAccessor="label"
+                valueAccessor="value"
+                name="extension"
+                placeholder="Selecione uma extensão de arquivo"
+              />
+              <CheckboxField
+                name="acceptDirectories"
+                label="Pastas"
+                defaultChecked={true}
+              />
+              <CheckboxField
+                name="acceptFiles"
+                label="Arquivos"
+                defaultChecked={true}
+              />
+            </div>
           </PopoverContent>
         </Popover>
         <Button type="submit">
