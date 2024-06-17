@@ -126,6 +126,7 @@ pub async fn get_volumes(state_mux: State<'_, StateSafe>) -> Result<Vec<Volume>,
     sys.refresh_all();
 
     let mut cache_exists = fs::metadata(&CACHE_FILE_PATH[..]).is_ok();
+
     if cache_exists {
         cache_exists = load_system_cache(&state_mux);
     } else {

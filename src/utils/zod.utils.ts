@@ -118,4 +118,3 @@ export const optionalBooleanStringSchema =
 
 export const optionalOrderParamSchema =
   createNullableTransform(orderParamSchema);
-

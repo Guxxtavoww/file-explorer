@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
 import { getTheme, setTheme } from '@/utils/app.utils';
+import { queryClient } from '@/providers/tanstack.provider';
 
 export type Theme = 'light' | 'dark';
 
@@ -16,7 +17,7 @@ type ThemeContextType = {
 const ThemeContext = createContext<ThemeContextType | null>(null);
 
 export default function ThemeProvider({ children }: WithChildren) {
-  const { data: theme, refetch } = useQuery<Theme>({
+  const { data: theme } = useQuery<Theme>({
     queryKey: ['theme'],
     queryFn: getTheme,
     initialData: 'light',
@@ -25,7 +26,7 @@ export default function ThemeProvider({ children }: WithChildren) {
   const { mutate: toggleTheme, isPending } = useMutation({
     mutationKey: ['set-theme', theme],
     mutationFn: () => setTheme(theme === 'light' ? 'dark' : 'light'),
-    onSuccess: () => refetch(),
+    onSuccess: () => queryClient.refetchQueries({ queryKey: ['theme'] }),
   });
 
   useEffect(() => {

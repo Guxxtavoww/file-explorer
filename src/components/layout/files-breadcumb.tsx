@@ -5,25 +5,33 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbPage,
+  // BreadcrumbPage,
   BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
+} from '@/components/ui/breadcumb';
+import { useAppState } from '@/shared/state/app.state';
 
 export function FilesBreadcumb() {
+  const { currentVolumeMountPoint, setCurrentVolumeMountPoint } = useAppState();
+
   return (
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink href="/">Home</BreadcrumbLink>
+          <BreadcrumbLink onClick={() => setCurrentVolumeMountPoint(undefined)}>
+            Seu computador
+          </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          <BreadcrumbLink href="/docs/components">Components</BreadcrumbLink>
-        </BreadcrumbItem>
+        {currentVolumeMountPoint ? (
+          <BreadcrumbItem>
+            <BreadcrumbLink>{currentVolumeMountPoint}</BreadcrumbLink>
+          </BreadcrumbItem>
+        ) : null}
+        {/*
         <BreadcrumbSeparator />
         <BreadcrumbItem>
           <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
-        </BreadcrumbItem>
+        </BreadcrumbItem> */}
       </BreadcrumbList>
     </Breadcrumb>
   );
