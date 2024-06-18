@@ -64,7 +64,7 @@ export function DirectoryContents() {
                   <EllipsisVertical className="w-4 h-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent>
+              <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Ações</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => handleDelete(type, path)}>

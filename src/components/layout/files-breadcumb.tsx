@@ -23,20 +23,31 @@ export function FilesBreadcumb() {
     childPath,
     removeChildPath,
     clearChildPath,
+    setSearchResults,
   } = useAppState();
 
   return (
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink onClick={() => setCurrentVolumeMountPoint(undefined)}>
+          <BreadcrumbLink
+            onClick={() => {
+              setCurrentVolumeMountPoint(undefined);
+              setSearchResults(undefined);
+            }}
+          >
             Seu computador
           </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         {currentVolumeMountPoint ? (
           <BreadcrumbLink>
-            <BreadcrumbLink onClick={clearChildPath}>
+            <BreadcrumbLink
+              onClick={() => {
+                clearChildPath();
+                setSearchResults(undefined);
+              }}
+            >
               {currentVolumeMountPoint}
             </BreadcrumbLink>
           </BreadcrumbLink>
@@ -47,7 +58,10 @@ export function FilesBreadcumb() {
                 <BreadcrumbSeparator />
                 <BreadcrumbLink
                   key={index}
-                  onClick={() => removeChildPath(index)}
+                  onClick={() => {
+                    removeChildPath(index);
+                    setSearchResults(undefined);
+                  }}
                 >
                   <BreadcrumbLink>
                     {index > 0
