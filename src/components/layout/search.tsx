@@ -13,15 +13,15 @@ import { fileExtentionsOptions } from '@/data/file-extentions-options.data';
 import { Loader } from './loader';
 import { Form } from '../ui/form';
 import { Button } from '../ui/button';
+import { toast } from '../ui/use-toast';
 import { InputField } from '../ui/input';
 import { CheckboxField } from '../ui/checkbox';
 import { SelectField } from '../ui/select-field';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
-import { toast } from '../ui/use-toast';
 
 const formSchema = z.object({
-  query: optionalStringSchema.default(''),
-  extension: optionalStringSchema,
+  query: optionalStringSchema,
+  extension: optionalStringSchema.default(''),
   acceptFiles: z.boolean().default(true),
   acceptDirectories: z.boolean().default(true),
 });
@@ -34,23 +34,31 @@ export function Search() {
 
   const { mutateAsync, isPending } = useMutation({
     mutationKey: ['search'],
-    mutationFn: (filters: FormType) =>
-      invoke<iDirectoryContent[]>('search_directory', {
+    mutationFn: (filters: FormType) => {
+      const payload = {
         ...filters,
-        searchDirectory: childPath[childPath.length - 1] || '\\',
+        searchDirectory:
+          childPath[childPath.length - 1] || currentVolumeMountPoint,
         mountPnt: currentVolumeMountPoint,
-      }),
+      };
+
+      console.log(payload);
+
+      return invoke<iDirectoryContent[]>('search_directory', payload);
+    },
     onSuccess: (data) => setSearchResults(data),
-    onError: (err) =>
+    onError: () =>
       toast({
-        title: 'Erro ao buscar',
+        title: 'Erro!',
         variant: 'destructive',
-        description: `Msg: ${err.message || 'Sem mensagem'}`,
       }),
   });
 
+  const isDisabled = !currentVolumeMountPoint || isPending;
+
   const form = useForm<FormType>({
     resolver: zodResolver(formSchema),
+    disabled: isDisabled,
   });
 
   const handleSubmit = useCallback(
@@ -68,8 +76,8 @@ export function Search() {
       >
         <InputField name="query" placeholder="Insira uma pasta ou arquivo" />
         <Popover>
-          <PopoverTrigger asChild disabled={isPending}>
-            <Button variant="outline" type="button" disabled={isPending}>
+          <PopoverTrigger asChild disabled={isDisabled}>
+            <Button variant="outline" type="button" disabled={isDisabled}>
               <Filter />
             </Button>
           </PopoverTrigger>
@@ -99,7 +107,7 @@ export function Search() {
             </div>
           </PopoverContent>
         </Popover>
-        <Button type="submit" disabled={isPending}>
+        <Button type="submit" disabled={isDisabled}>
           {isPending ? <Loader /> : <SearchIcon />}
         </Button>
       </form>

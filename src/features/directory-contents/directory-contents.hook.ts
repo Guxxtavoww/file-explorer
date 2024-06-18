@@ -16,8 +16,13 @@ const refechGetDirectories = () =>
   queryClient.refetchQueries({ queryKey: [GET_DIRECTORIES] });
 
 export function useDirectoryContent() {
-  const { currentVolumeMountPoint, childPath, setChildPath, searchResults } =
-    useAppState();
+  const {
+    currentVolumeMountPoint,
+    childPath,
+    setChildPath,
+    searchResults,
+    setSearchResults,
+  } = useAppState();
 
   const { data: directoryContents, isLoading } = useQuery({
     queryKey: [GET_DIRECTORIES],
@@ -50,6 +55,7 @@ export function useDirectoryContent() {
 
   const onDirectoryClick = useCallback(async (path: string) => {
     setChildPath(path);
+    setSearchResults(null);
   }, []);
 
   const onFileClick = useCallback(async (path: string) => {
