@@ -23,10 +23,11 @@ export const useAppState = create<AppState>((set) => ({
   },
   currentVolumeMountPoint: undefined,
   childPath: [],
-  setChildPath: (path) =>
-    set((state) => ({
+  setChildPath: (path) => {
+    return set((state) => ({
       childPath: [...state.childPath, path],
-    })),
+    }));
+  },
   removeChildPath: (index) => {
     set((state) => {
       const newChildPath = state.childPath.slice();

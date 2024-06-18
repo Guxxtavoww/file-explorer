@@ -53,12 +53,16 @@ export function useDirectoryContent() {
     onSuccess: refechGetDirectories,
   });
 
-  const onDirectoryClick = useCallback(async (path: string) => {
-    setChildPath(path);
-    setSearchResults(null);
-  }, []);
+  const onDirectoryClick = useCallback(
+    async (path: string) => {
+      setChildPath(path);
+      setSearchResults(null);
+    },
+    [setChildPath, setSearchResults]
+  );
 
   const onFileClick = useCallback(async (path: string) => {
+    console.log('caiu aqui');
     await openFile(path);
   }, []);
 

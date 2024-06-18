@@ -41,7 +41,7 @@ export function FilesBreadcumb() {
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         {currentVolumeMountPoint ? (
-          <BreadcrumbLink>
+          <BreadcrumbItem>
             <BreadcrumbLink
               onClick={() => {
                 clearChildPath();
@@ -50,7 +50,7 @@ export function FilesBreadcumb() {
             >
               {currentVolumeMountPoint}
             </BreadcrumbLink>
-          </BreadcrumbLink>
+          </BreadcrumbItem>
         ) : null}
         {childPath.length
           ? childPath.map((path, index) => (
