@@ -107,7 +107,15 @@ export function Search() {
             </div>
           </PopoverContent>
         </Popover>
-        <Button type="submit" disabled={isDisabled}>
+        <Button
+          type="submit"
+          disabled={isDisabled}
+          title={
+            !currentVolumeMountPoint
+              ? 'Selecione um volume para fazer buscas '
+              : ''
+          }
+        >
           {isPending ? <Loader /> : <SearchIcon />}
         </Button>
       </form>
