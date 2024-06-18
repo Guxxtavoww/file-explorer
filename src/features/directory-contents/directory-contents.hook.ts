@@ -1,15 +1,26 @@
-import { useCallback } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useCallback, useEffect } from 'react';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 import { useAppState } from '@/shared/state/app.state';
 import { queryClient } from '@/providers/tanstack.provider';
-import { openDirectory, openFile } from '@/utils/file-explorer.utils';
+import {
+  deleteFile,
+  deleteFolder,
+  openDirectory,
+  openFile,
+} from '@/utils/file-explorer.utils';
+
+const GET_DIRECTORIES = 'get-directories';
+
+const refechGetDirectories = () =>
+  queryClient.refetchQueries({ queryKey: [GET_DIRECTORIES] });
 
 export function useDirectoryContent() {
-  const { currentVolumeMountPoint, childPath, setChildPath } = useAppState();
+  const { currentVolumeMountPoint, childPath, setChildPath, searchResults } =
+    useAppState();
 
   const { data: directoryContents, isLoading } = useQuery({
-    queryKey: ['get-directories'],
+    queryKey: [GET_DIRECTORIES],
     queryFn: () => {
       const path = String(
         childPath[childPath.length - 1] || currentVolumeMountPoint
@@ -19,19 +30,49 @@ export function useDirectoryContent() {
     },
   });
 
-  const onDirectoryDoubleClick = useCallback(async (path: string) => {
+  const { mutateAsync } = useMutation({
+    mutationKey: ['delete-file-or-dir'],
+    mutationFn: async ({
+      path,
+      type,
+    }: {
+      type: 'Directory' | 'File';
+      path: string;
+    }) => {
+      if (type === 'Directory') {
+        return deleteFolder(path);
+      }
+
+      return deleteFile(path);
+    },
+    onSuccess: refechGetDirectories,
+  });
+
+  const onDirectoryClick = useCallback(async (path: string) => {
     setChildPath(path);
-    queryClient.refetchQueries({ queryKey: ['get-directories'] });
   }, []);
 
-  const onFileDoubleClick = useCallback(async (filePath: string) => {
-    console.log(await openFile(filePath));
+  const onFileClick = useCallback(async (path: string) => {
+    await openFile(path);
   }, []);
+
+  const handleDelete = useCallback(
+    async (type: 'Directory' | 'File', path: string) => {
+      await mutateAsync({ type, path });
+    },
+    []
+  );
+
+  useEffect(() => {
+    refechGetDirectories();
+  }, [childPath, currentVolumeMountPoint]);
 
   return {
     directoryContents,
-    isLoading,
-    onDirectoryDoubleClick,
-    onFileDoubleClick,
+    isLoading: isLoading,
+    onDirectoryClick,
+    onFileClick,
+    handleDelete,
+    searchResults,
   };
 }

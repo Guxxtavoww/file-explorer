@@ -6,7 +6,7 @@ import { useAppState } from './shared/state/app.state';
 import { DirectoryContents } from './features/directory-contents';
 
 export default function App() {
-  const { currentVolumeMountPoint } = useAppState();
+  const { currentVolumeMountPoint, searchResults } = useAppState();
 
   return (
     <>
@@ -20,7 +20,11 @@ export default function App() {
           <h1 className="text-2xl mb-5">
             Bem vindo ao seu novo e mais rápido, explorador de arquivos!
           </h1>
-          {!currentVolumeMountPoint ? <ChooseVolumes /> : <DirectoryContents />}
+          {!currentVolumeMountPoint && !searchResults ? (
+            <ChooseVolumes />
+          ) : (
+            <DirectoryContents />
+          )}
         </main>
       </div>
     </>

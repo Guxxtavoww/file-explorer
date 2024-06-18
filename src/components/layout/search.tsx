@@ -1,18 +1,23 @@
 import { z } from 'zod';
+import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { invoke } from '@tauri-apps/api/tauri';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
 import { Filter, Search as SearchIcon } from 'lucide-react';
 
+import { useAppState } from '@/shared/state/app.state';
 import { optionalStringSchema } from '@/utils/zod.utils';
 import { fileExtentionsOptions } from '@/data/file-extentions-options.data';
 
+import { Loader } from './loader';
 import { Form } from '../ui/form';
 import { Button } from '../ui/button';
 import { InputField } from '../ui/input';
 import { CheckboxField } from '../ui/checkbox';
 import { SelectField } from '../ui/select-field';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { toast } from '../ui/use-toast';
 
 const formSchema = z.object({
   query: optionalStringSchema.default(''),
@@ -24,19 +29,36 @@ const formSchema = z.object({
 type FormType = z.infer<typeof formSchema>;
 
 export function Search() {
+  const { currentVolumeMountPoint, childPath, setSearchResults } =
+    useAppState();
+
+  const { mutateAsync, isPending } = useMutation({
+    mutationKey: ['search'],
+    mutationFn: (filters: FormType) =>
+      invoke<iDirectoryContent[]>('search_directory', {
+        ...filters,
+        searchDirectory: childPath[childPath.length - 1] || '\\',
+        mountPnt: currentVolumeMountPoint,
+      }),
+    onSuccess: (data) => setSearchResults(data),
+    onError: (err) =>
+      toast({
+        title: 'Erro ao buscar',
+        variant: 'destructive',
+        description: `Msg: ${err.message || 'Sem mensagem'}`,
+      }),
+  });
+
   const form = useForm<FormType>({
     resolver: zodResolver(formSchema),
   });
 
-  async function handleSubmit(filters: FormType) {
-    const results = await invoke<iDirectoryContent[]>('search_directory', {
-      ...filters,
-      searchDirectory: '',
-      mountPnt: '',
-    });
-
-    console.log(results);
-  }
+  const handleSubmit = useCallback(
+    async (filters: FormType) => {
+      await mutateAsync(filters);
+    },
+    [mutateAsync]
+  );
 
   return (
     <Form {...form}>
@@ -46,8 +68,8 @@ export function Search() {
       >
         <InputField name="query" placeholder="Insira uma pasta ou arquivo" />
         <Popover>
-          <PopoverTrigger asChild>
-            <Button variant="outline" type="button">
+          <PopoverTrigger asChild disabled={isPending}>
+            <Button variant="outline" type="button" disabled={isPending}>
               <Filter />
             </Button>
           </PopoverTrigger>
@@ -77,8 +99,8 @@ export function Search() {
             </div>
           </PopoverContent>
         </Popover>
-        <Button type="submit">
-          <SearchIcon />
+        <Button type="submit" disabled={isPending}>
+          {isPending ? <Loader /> : <SearchIcon />}
         </Button>
       </form>
     </Form>

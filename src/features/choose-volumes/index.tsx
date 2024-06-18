@@ -19,9 +19,9 @@ export function ChooseVolumes() {
     return (
       <div className="space-y-2 text-center">
         <div className="flex items-center w-full space-x-3">
-          <Skeleton className="h-20 flex-[1]" />
-          <Skeleton className="h-20 flex-[1]" />
-          <Skeleton className="h-20 flex-[1]" />
+          <Skeleton className="h-44 flex-[1]" />
+          <Skeleton className="h-44 flex-[1]" />
+          <Skeleton className="h-44 flex-[1]" />
         </div>
         <h2>
           Aguarde enquanto estamos casheando seus arquivos. Isso pode demorar

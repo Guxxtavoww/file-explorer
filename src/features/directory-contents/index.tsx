@@ -1,4 +1,13 @@
-import { File, Folder, Trash } from 'lucide-react';
+import { EllipsisVertical, File, Folder } from 'lucide-react';
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Loader } from '@/components/layout/loader';
 
@@ -8,46 +17,63 @@ export function DirectoryContents() {
   const {
     directoryContents,
     isLoading,
-    onDirectoryDoubleClick,
-    onFileDoubleClick,
+    onDirectoryClick,
+    onFileClick,
+    handleDelete,
+    searchResults,
   } = useDirectoryContent();
 
   if (isLoading) {
     return <Loader label="Carregando dados..." />;
   }
 
-  if (!directoryContents?.length) return <h2>Não há conteúdo nessa pasta.</h2>;
+  const data = searchResults ?? directoryContents;
+
+  if (!data?.length) return <h2>Não há conteúdo nessa pasta.</h2>;
 
   return (
     <div className="w-full flex flex-col items-start gap-3">
-      {directoryContents.map((content, index) => {
+      {data.map((content, index) => {
         const [type, [name, path]] = Object.entries(content)[0] as [
           'File' | 'Directory',
-          [string, string]
+          readonly [string, string]
         ];
 
         const isDirectory = type === 'Directory';
 
         return (
-          <Button
-            variant="ghost"
-            key={index}
-            className="flex justify-between w-full !py-8"
-            onDoubleClick={() =>
-              isDirectory
-                ? onDirectoryDoubleClick(path)
-                : onFileDoubleClick(path)
-            }
-          >
-            <strong className="inline-flex items-center gap-3">
-              {isDirectory ? <Folder /> : <File />} {name}
-            </strong>
-            <div className="flex items-center gap-3">
-              <Button variant="destructive">
-                <Trash />
-              </Button>
-            </div>
-          </Button>
+          <div key={index} className="w-full flex items-center justify-between">
+            <Button
+              variant="ghost"
+              className="flex justify-start flex-[1] !py-8 rounded-e-none"
+              onClick={() => {
+                if (isDirectory) {
+                  return onDirectoryClick(path);
+                }
+
+                return onFileClick(path);
+              }}
+            >
+              <strong className="inline-flex items-center gap-3">
+                {isDirectory ? <Folder /> : <File />} {name}
+              </strong>
+            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="link" className="!py-7">
+                  <EllipsisVertical className="w-4 h-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuLabel>Ações</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => handleDelete(type, path)}>
+                  Deletar {isDirectory ? 'Pasta' : 'Arquivo'}
+                </DropdownMenuItem>
+                <DropdownMenuItem>Propriedades</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         );
       })}
     </div>

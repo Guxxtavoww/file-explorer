@@ -15,7 +15,7 @@ use search::search_directory;
 use filesystem::volume::get_volumes;
 use utils::splashscreen::close_splashscreen;
 use utils::theme::{ change_theme, read_theme };
-use filesystem::explorer::{ open_file, open_directory, create_file, create_directory, rename_file, delete_file };
+use filesystem::explorer::{ open_file, open_directory, create_file, create_directory, rename_file, delete_file, delete_folder };
 
 #[derive(Serialize, Deserialize)]
 pub struct CachedPath {
@@ -50,7 +50,8 @@ async fn main() {
         rename_file, 
         delete_file, 
         search_directory, 
-        get_volumes
+        get_volumes,
+        delete_folder,
       ])
     .menu(menu)
     .on_menu_event(|event| {

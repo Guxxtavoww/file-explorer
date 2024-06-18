@@ -120,3 +120,17 @@ pub async fn delete_file(state_mux: State<'_, StateSafe>, path: String) -> Resul
         Err(err) => Err(Error::Custom(err.to_string())),
     }
 }
+
+#[tauri::command]
+pub fn delete_folder(state_mux: State<'_, StateSafe>, path: String) -> Result<(), Error> {
+    let mount_point_str = get_mount_point(path.clone()).unwrap_or_default();
+
+    let fs_event_manager = FsEventHandler::new(state_mux.deref().clone(), mount_point_str.into());
+    fs_event_manager.handle_delete(Path::new(&path));
+
+    let res = fs::remove_dir_all(path);
+    match res {
+        Ok(_) => Ok(()),
+        Err(err) => Err(Error::Custom(err.to_string())),
+    }
+}

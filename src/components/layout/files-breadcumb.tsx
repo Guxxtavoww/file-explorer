@@ -10,12 +10,19 @@ import {
 } from '@/components/ui/breadcumb';
 import { useAppState } from '@/shared/state/app.state';
 
+function handleFileName(path: string) {
+  const split = path.split('\\');
+
+  return split[split.length - 1] as string;
+}
+
 export function FilesBreadcumb() {
   const {
     currentVolumeMountPoint,
     setCurrentVolumeMountPoint,
     childPath,
     removeChildPath,
+    clearChildPath,
   } = useAppState();
 
   return (
@@ -29,7 +36,9 @@ export function FilesBreadcumb() {
         <BreadcrumbSeparator />
         {currentVolumeMountPoint ? (
           <BreadcrumbLink>
-            <BreadcrumbLink>{currentVolumeMountPoint}</BreadcrumbLink>
+            <BreadcrumbLink onClick={clearChildPath}>
+              {currentVolumeMountPoint}
+            </BreadcrumbLink>
           </BreadcrumbLink>
         ) : null}
         {childPath.length
@@ -38,9 +47,13 @@ export function FilesBreadcumb() {
                 <BreadcrumbSeparator />
                 <BreadcrumbLink
                   key={index}
-                  onClick={() => removeChildPath(path)}
+                  onClick={() => removeChildPath(index)}
                 >
-                  <BreadcrumbLink>{path}</BreadcrumbLink>
+                  <BreadcrumbLink>
+                    {index > 0
+                      ? handleFileName(path)
+                      : path.replace(currentVolumeMountPoint as string, '')}
+                  </BreadcrumbLink>
                 </BreadcrumbLink>
               </>
             ))

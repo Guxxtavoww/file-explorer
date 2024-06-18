@@ -3,7 +3,6 @@ import { invoke } from '@tauri-apps/api/tauri';
 export async function openDirectory(
   path: string
 ): Promise<iDirectoryContent[]> {
-  console.log({ path });
   return invoke('open_directory', { path });
 }
 
@@ -28,4 +27,8 @@ export async function renameFile(
 
 export async function deleteFile(path: string): Promise<void> {
   return invoke('delete_file', { path });
+}
+
+export async function deleteFolder(path: string): Promise<void> {
+  return invoke('delete_folder', { path });
 }
