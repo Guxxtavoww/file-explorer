@@ -45,7 +45,7 @@ export function DirectoryContents() {
           <div key={index} className="w-full flex items-center justify-between">
             <Button
               variant="ghost"
-              className="flex justify-start flex-[1] !py-8 rounded-e-none"
+              className="flex justify-start flex-[1] !py-8"
               onClick={() => {
                 if (isDirectory) {
                   return onDirectoryClick(path);

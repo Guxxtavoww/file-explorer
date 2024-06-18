@@ -63,11 +63,11 @@ export function FilesBreadcumb() {
                     setSearchResults(undefined);
                   }}
                 >
-                  <BreadcrumbLink>
+                  <BreadcrumbItem>
                     {index > 0
                       ? handleFileName(path)
                       : path.replace(currentVolumeMountPoint as string, '')}
-                  </BreadcrumbLink>
+                  </BreadcrumbItem>
                 </BreadcrumbLink>
               </>
             ))
