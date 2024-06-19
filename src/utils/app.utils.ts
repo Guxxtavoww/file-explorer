@@ -1,5 +1,3 @@
-'use client';
-
 import { invoke } from '@tauri-apps/api/tauri';
 
 import type { Theme } from '@/contexts/theme.context';

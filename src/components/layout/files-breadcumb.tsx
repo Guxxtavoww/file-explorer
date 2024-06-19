@@ -1,5 +1,3 @@
-'use client';
-
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -72,11 +70,6 @@ export function FilesBreadcumb() {
               </>
             ))
           : null}
-        {/*
-        <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
-        </BreadcrumbItem> */}
       </BreadcrumbList>
     </Breadcrumb>
   );
