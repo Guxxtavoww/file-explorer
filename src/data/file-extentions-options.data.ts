@@ -20,6 +20,10 @@ export const fileExtentionsOptions = [
     value: '.xlsx',
   },
   {
+    label: 'Exe (executavies)',
+    value: '.exe',
+  },
+  {
     label: 'Png (imagens)',
     value: '.png',
   },

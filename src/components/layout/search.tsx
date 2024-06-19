@@ -20,7 +20,7 @@ import { SelectField } from '../ui/select-field';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 
 const formSchema = z.object({
-  query: optionalStringSchema,
+  query: optionalStringSchema.default(''),
   extension: optionalStringSchema.default(''),
   acceptFiles: z.boolean().default(true),
   acceptDirectories: z.boolean().default(true),
@@ -38,15 +38,21 @@ export function Search() {
       const payload = {
         ...filters,
         searchDirectory:
-          childPath[childPath.length - 1] || currentVolumeMountPoint,
+          childPath.length > 1
+            ? childPath[childPath.length - 1]
+            : childPath[0] || currentVolumeMountPoint,
         mountPnt: currentVolumeMountPoint,
       };
 
-      console.log(payload);
-
       return invoke<iDirectoryContent[]>('search_directory', payload);
     },
-    onSuccess: (data) => setSearchResults(data),
+    onSuccess: (data) => {
+      if (!data.length) {
+        return toast({ title: 'Sem resultados para essa busca' });
+      }
+
+      setSearchResults(data);
+    },
     onError: () =>
       toast({
         title: 'Erro!',
