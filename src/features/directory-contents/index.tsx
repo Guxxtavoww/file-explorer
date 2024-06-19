@@ -1,4 +1,4 @@
-import { EllipsisVertical, File, Folder } from 'lucide-react';
+import { EllipsisVertical, File, Folder, Trash } from 'lucide-react';
 
 import {
   DropdownMenu,
@@ -27,7 +27,25 @@ export function DirectoryContents() {
     return <Loader label="Carregando dados..." />;
   }
 
-  const data = searchResults ?? directoryContents;
+  const data = (searchResults ?? directoryContents)?.sort((a, b) => {
+    const [typeA, [nameA]] = Object.entries(a)[0] as [
+      'File' | 'Directory',
+      readonly [string, string]
+    ];
+
+    const [typeB, [nameB]] = Object.entries(b)[0] as [
+      'File' | 'Directory',
+      readonly [string, string]
+    ];
+
+    // Prioritize directories over files
+    if (typeA !== typeB) {
+      return typeA === 'Directory' ? -1 : 1;
+    }
+
+    // Alphabetical order
+    return nameA.localeCompare(nameB);
+  });
 
   if (!data?.length) return <h2>Não há conteúdo nessa pasta.</h2>;
 
@@ -45,7 +63,7 @@ export function DirectoryContents() {
           <div key={index} className="w-full flex items-center justify-between">
             <Button
               variant="ghost"
-              className="flex justify-start flex-[1] !py-8"
+              className="flex justify-between flex-[1] !py-8"
               onClick={() => {
                 if (isDirectory) {
                   return onDirectoryClick(path);
@@ -67,10 +85,16 @@ export function DirectoryContents() {
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Ações</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => handleDelete(type, path)}>
-                  Deletar {isDirectory ? 'Pasta' : 'Arquivo'}
+                <DropdownMenuItem
+                  className="inline-flex items-center gap-2"
+                  onClick={() => handleDelete(type, path)}
+                >
+                  <Trash className="w-3 h-3" /> Deletar{' '}
+                  {isDirectory ? 'Pasta' : 'Arquivo'}
                 </DropdownMenuItem>
-                <DropdownMenuItem>Propriedades</DropdownMenuItem>
+                {!!searchResults ? (
+                  <DropdownMenuItem>Caminho: {path}</DropdownMenuItem>
+                ) : null}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
