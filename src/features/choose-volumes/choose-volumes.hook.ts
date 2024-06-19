@@ -5,6 +5,8 @@ import { useQuery } from '@tanstack/react-query';
 import { useAppState } from '@/shared/state/app.state';
 
 export function useChooseVolumes() {
+  const volumesLengthRef = useRef<number>(0);
+
   const { data: volumes, isLoading } = useQuery({
     queryKey: ['volumes'],
     queryFn: async () => {
@@ -17,8 +19,6 @@ export function useChooseVolumes() {
       return volumes_res;
     },
   });
-
-  const volumesLengthRef = useRef<number>(0);
 
   const { setCurrentVolumeMountPoint } = useAppState();
 
