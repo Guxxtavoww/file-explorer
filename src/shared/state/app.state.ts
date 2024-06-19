@@ -13,8 +13,7 @@ export type AppState = {
 
 export const useAppState = create<AppState>((set) => ({
   searchResults: null,
-  setSearchResults: (searchResults) =>
-    set(() => ({ searchResults, childPath: [] })),
+  setSearchResults: (searchResults) => set(() => ({ searchResults })),
   setCurrentVolumeMountPoint: (mountPoint) => {
     if (!mountPoint)
       return set({ childPath: [], currentVolumeMountPoint: undefined });
