@@ -34,6 +34,7 @@ export function FilesBreadcumb() {
             onClick={() => {
               setCurrentVolumeMountPoint(undefined);
               setSearchResults(undefined);
+              clearChildPath();
             }}
           >
             Seu computador
