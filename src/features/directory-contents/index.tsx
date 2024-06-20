@@ -21,6 +21,7 @@ export function DirectoryContents() {
     onFileClick,
     handleDelete,
     searchResults,
+    setSearchResults,
   } = useDirectoryContent();
 
   if (isLoading) {
@@ -51,6 +52,9 @@ export function DirectoryContents() {
 
   return (
     <div className="w-full flex flex-col items-start gap-3">
+      {searchResults?.length ? (
+        <Button onClick={() => setSearchResults(null)}>Resetar busca!</Button>
+      ) : null}
       {data.map((content, index) => {
         const [type, [name, path]] = Object.entries(content)[0] as [
           'File' | 'Directory',

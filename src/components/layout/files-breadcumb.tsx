@@ -1,3 +1,5 @@
+import React from 'react';
+
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -52,7 +54,7 @@ export function FilesBreadcumb() {
         ) : null}
         {childPath.length
           ? childPath.map((path, index) => (
-              <>
+              <React.Fragment key={index}>
                 <BreadcrumbSeparator />
                 <BreadcrumbLink
                   key={index}
@@ -67,7 +69,7 @@ export function FilesBreadcumb() {
                       : path.replace(currentVolumeMountPoint as string, '')}
                   </BreadcrumbItem>
                 </BreadcrumbLink>
-              </>
+              </React.Fragment>
             ))
           : null}
       </BreadcrumbList>

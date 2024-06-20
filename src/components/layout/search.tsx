@@ -44,6 +44,8 @@ export function Search() {
         mountPnt: currentVolumeMountPoint,
       };
 
+      console.log(payload)
+
       return invoke<iDirectoryContent[]>('search_directory', payload);
     },
     onSuccess: (data) => {

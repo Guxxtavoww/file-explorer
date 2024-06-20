@@ -64,7 +64,6 @@ export function useDirectoryContent() {
   );
 
   const onFileClick = useCallback(async (path: string) => {
-    console.log('caiu aqui');
     await openFile(path);
   }, []);
 
@@ -90,5 +89,6 @@ export function useDirectoryContent() {
     onFileClick,
     handleDelete,
     searchResults,
+    setSearchResults
   };
 }
