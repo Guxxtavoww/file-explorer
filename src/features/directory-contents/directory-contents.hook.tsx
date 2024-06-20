@@ -9,6 +9,8 @@ import {
   openDirectory,
   openFile,
 } from '@/utils/file-explorer.utils';
+import { toast } from '@/components/ui/use-toast';
+import { Loader } from '@/components/layout/loader';
 
 const GET_DIRECTORIES = 'get-directories';
 
@@ -68,7 +70,11 @@ export function useDirectoryContent() {
 
   const handleDelete = useCallback(
     async (type: 'Directory' | 'File', path: string) => {
-      await mutateAsync({ type, path });
+      toast({ title: 'Deletando...', children: <Loader /> });
+
+      await mutateAsync({ type, path }).finally(() => {
+        toast({ title: 'Deletado com sucesso!' });
+      });
     },
     []
   );
