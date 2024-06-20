@@ -50,7 +50,7 @@ function InputField({
       render={({ field }) => (
         <div className="grid w-full max-w-sm items-center gap-1.5">
           {label && <FormLabel htmlFor={field.name}>{label}</FormLabel>}
-          <Input {...field} className={className} type={type} {...rest} />
+          <Input className={className} type={type} {...rest} {...field} />
           <FormMessage />
         </div>
       )}
